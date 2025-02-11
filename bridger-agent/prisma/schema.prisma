@@ -27,17 +27,17 @@ model QuickBooksOnlineAccount {
 }
 
 model Transaction {
-  id                           Int       @id @default(autoincrement())
+  id                           String       @id
   quickBooksOnlineAccountId    Int
   transactionDatetime          DateTime
   bankDetail                   String
   categoryString               String
   payee                        String
-  spent                        Float
-  received                     Float
+  spent                        Float?
+  received                     Float?
   categorizedDate              DateTime?
-  categoryId                   Int?
-  payeeId                      Int?
+  categoryId                   String?
+  payeeId                      String?
   quickBooksOnlineAccount      QuickBooksOnlineAccount @relation(fields: [quickBooksOnlineAccountId], references: [id], onDelete: Cascade)
   category                     Category?  @relation(fields: [categoryId], references: [id], onDelete: SetNull)
   payeeRef                     Payee?     @relation(fields: [payeeId], references: [id], onDelete: SetNull)
@@ -46,13 +46,13 @@ model Transaction {
 
 model Attachment {
   id            Int         @id @default(autoincrement())
-  transactionId Int
+  transactionId String
   file          Bytes
   transaction   Transaction @relation(fields: [transactionId], references: [id], onDelete: Cascade)
 }
 
 model Category {
-  id                         Int                        @id @default(autoincrement())
+  id                         String @id
   name                       String
   quickBooksOnlineAccountId  Int
   quickBooksOnlineAccount    QuickBooksOnlineAccount  @relation(fields: [quickBooksOnlineAccountId], references: [id], onDelete: Cascade)
@@ -60,7 +60,7 @@ model Category {
 }
 
 model Payee {
-  id                         Int                        @id @default(autoincrement())
+  id                         String @id
   name                       String
   quickBooksOnlineAccountId  Int
   quickBooksOnlineAccount    QuickBooksOnlineAccount  @relation(fields: [quickBooksOnlineAccountId], references: [id], onDelete: Cascade)
