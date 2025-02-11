@@ -43,7 +43,7 @@ const run = async () => {
     const upsertData = {
       id,
       quickBooksOnlineAccountId: 1,
-      transactionDatetime: new Date(row["TransactionDate"]),
+      transactionDatetime: new Date(row["TransactionDate"]).toISOString(),
       bankDetail: row["DESCRIPTION"],
       categoryString: row["Categorize or match"],
       payee: row["Payee"],
