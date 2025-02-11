@@ -7,6 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "parse-file": "tsx src/scripts/parse-file.ts",
     "prisma:migrate:dev": "prisma migrate dev",
     "prisma:studio": "prisma studio",
     "prisma:format": "prisma format"
@@ -19,7 +20,8 @@
     "next": "15.0.3",
     "prisma": "^5.22.0",
     "react": "19.0.0-rc-66855b96-20241106",
-    "react-dom": "19.0.0-rc-66855b96-20241106"
+    "react-dom": "19.0.0-rc-66855b96-20241106",
+    "tsx": "^4.19.2"
   },
   "devDependencies": {
     "@types/node": "^20",
