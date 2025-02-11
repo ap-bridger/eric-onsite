@@ -18,3 +18,9 @@ You can either run `export ANTHROPIC_API_KEY=...` to a `.env` file, or run it di
 ## Using the API
 
 `curl http://localhost:8000/agent -H "Content-Type: application/json" -d '{"username": "1"}'`
+
+
+[//]: # (curl http://localhost:8000/agent -H "Content-Type: application/json" -d '{"username": "1"}')
+
+
+Invoke-RestMethod -Uri "http://localhost:8000/categorize" -Method Post -Headers @{ "Content-Type" = "application/json" } -Body '{"description": "Check 2158", "spent":210.00}'
