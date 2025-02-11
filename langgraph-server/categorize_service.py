@@ -3,7 +3,7 @@ from typing import Optional, Any
 import csv
 import heapq
 
-import editdistance
+import textdistance
 from pydantic import BaseModel
 
 
@@ -41,25 +41,33 @@ def load_training_data():
                 payee=row['Payee'] if row['Payee'] != '' else None,
                 category=row['Account'] if row['Account'] != '' else None,
             )
-            training_data.append(transaction)
+            if len(transaction.description.strip()) > 0:
+                training_data.append(transaction)
 
 def categorize(transaction: Transaction, top_n=5) -> tuple[list[str], list[str]] :
 
     payee_score: dict[str, float] = {}
     category_score: dict[str, float] = {}
+    jw = textdistance.JaroWinkler()
     for train_transaction in training_data:
-        dist = editdistance.distance(transaction.description, train_transaction.description)
 
-        score = 1/dist
+        dist = jw.distance(transaction.description, train_transaction.description)
+        # dist = editdistance.distance(transaction.description, train_transaction.description)
+        if dist == 0:
+            score = 2
+        else:
+            score = 1/dist
+
+        print(f"{transaction.description} {dist:5.2f} {score:5.2f} {train_transaction.description}")
 
         if train_transaction.payee is not None:
             if train_transaction.payee not in payee_score:
                 payee_score[train_transaction.payee] = 0
-            payee_score[train_transaction.payee] += score
+            payee_score[train_transaction.payee] = max(score, payee_score[train_transaction.payee])
         if train_transaction.category is not None:
             if train_transaction.category not in category_score:
                 category_score[train_transaction.category] = 0
-            category_score[train_transaction.category] += score
+            category_score[train_transaction.category] = max(score, category_score[train_transaction.category] )
 
     top_payee = heapq.nlargest(top_n, payee_score, key=payee_score.get)
     top_category = heapq.nlargest(top_n, category_score, key=category_score.get)
